@@ -21,3 +21,5 @@ server.on('request', (req, res) => { })
 server.listen(80, () => {
     console.log('启动')
 })
+
+exports.name = 1
