@@ -1,13 +1,17 @@
+// 数据库连接
 const db = require('../db/index')
+// 密码加密插件 bcryptjs@2.4.3
 const bcrypt = require('bcryptjs')
 
 exports.regUser = (req, res) => {
   const userinfo = req.body
 
+  // 校验账号密码是否为空
   if (!userinfo.username || !userinfo.password) {
     return res.send({ status: 1, message: '用户名或密码不能为空！' })
   }
 
+  // 查询账号是否重复
   const sqlStr = 'select * from my_db_01.ev_users where username=?'
 
   db.query(sqlStr, userinfo.username, (err, results) => {
@@ -20,8 +24,10 @@ exports.regUser = (req, res) => {
       })
     }
 
+    // 密码加密
     userinfo.password = bcrypt.hashSync(userinfo.password, 10)
 
+    // 写入添加用户信息
     const sql = 'insert into my_db_01.ev_users set ?'
 
     db.query(
